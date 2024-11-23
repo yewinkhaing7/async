@@ -37,8 +37,9 @@ export default function App() {
   const [todos,setTodos]=useState<listType[]>([]);
 
   const changeStatus=async (id:string)=>{
+    const updatedTodos=todos.map((td)=>(td.id===id? {...td,isDone: !td.isDone}:td ));
 
-    setTodos(prevState=>prevState.map((td)=>(td.id===id? {...td,isDone: !td.isDone}:td )));
+    setTodos(updatedTodos);
     await storeData(todos);
   };
 
@@ -52,11 +53,8 @@ export default function App() {
     {
       text:"yes",
       onPress:async()=>{
-        setTodos((prevState)=>prevState.map((td)=>td.id===id? {...td,isDone : false}:td
-      
-      )
-      
-    );
+        const updatedTodos=todos.map((td)=>td.id===id? {...td,isDone : false}:td);
+      setTodos(updatedTodos);
     await storeData(todos);
        
       },
@@ -68,13 +66,13 @@ export default function App() {
 
   const [inputVal,setInputVal]=useState<string>("");
 
-  const goText=async()=>{
-    const addText=[
+  const addNewTodo=async()=>{
+    const newTodo=[
      ...todos,{id:String(todos.length+1),message:inputVal,isDone:false},
     ];
 
-    setTodos(addText);
-    await storeData(addText);
+    setTodos(newTodo);
+    await storeData(newTodo);
     setInputVal("");
   };
 
@@ -122,7 +120,7 @@ useEffect(()=>{
      <View style={{width:"100%",paddingHorizontal:15}} >
         <TextInput placeholder='Please type working data' onChangeText={(val)=>setInputVal(val)} 
         
-        onSubmitEditing={goText}
+        onSubmitEditing={addNewTodo}
 
         style={styles.textBorder}
 
